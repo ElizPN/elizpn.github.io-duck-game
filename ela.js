@@ -17,7 +17,7 @@ var config = {
 };
 var cursors;
 var player;
-// var bread;
+var bread;
 var text;
 var breadGroup;
 var quack;
@@ -55,26 +55,26 @@ function create() {
 
   quack = this.sound.add("quack", { loop: false });
 
-  breadGroup = this.physics.add.staticGroup({
-    key: "bread",
-    frameQuantity: 10,
-    immovable: true,
-  });
-  var children = breadGroup.getChildren();
-  for (var i = 0; i < children.length; i++) {
-    var x = Phaser.Math.Between(50, 750);
-    var y = Phaser.Math.Between(50, 550);
+  // breadGroup = this.physics.add.staticGroup({
+  //   key: "bread",
+  //   frameQuantity: 10,
+  //   immovable: true,
+  // });
+  // var children = breadGroup.getChildren();
+  // for (var i = 0; i < children.length; i++) {
+  var x = Phaser.Math.Between(50, 750);
+  var y = Phaser.Math.Between(50, 550);
 
-    children[i].setPosition(x, y);
-  }
+  //   children[i].setPosition(x, y);
+  // }
 
-  breadGroup.refresh();
+  // breadGroup.refresh();
 
-  //   bread = this.physics.add.image(x, y, "bread");
+  bread = this.physics.add.image(x, y, "bread");
   //   bread.setScale(0.1);
-  //   bread.setCollideWorldBounds(true);
+  bread.setCollideWorldBounds(true);
 
-  this.physics.add.overlap(player, breadGroup, removeBread);
+  this.physics.add.overlap(player, bread, removeBread);
 }
 
 let removeBread = (duck, food) => {
