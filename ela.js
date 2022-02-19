@@ -21,6 +21,7 @@ var bread;
 var text;
 var breadGroup;
 var quack;
+var emitter;
 
 var game = new Phaser.Game(config);
 
@@ -55,36 +56,26 @@ function create() {
 
   quack = this.sound.add("quack", { loop: false });
 
-  // breadGroup = this.physics.add.staticGroup({
-  //   key: "bread",
-  //   frameQuantity: 10,
-  //   immovable: true,
-  // });
-  // var children = breadGroup.getChildren();
-  // for (var i = 0; i < children.length; i++) {
-  var x = Phaser.Math.Between(50, 750);
-  var y = Phaser.Math.Between(50, 550);
+  let removeBread = (duck, food) => {
+    console.log("transparent");
+    food.destroy();
+    quack.play();
+    emitter.emit("addBread");
+  };
 
-  //   children[i].setPosition(x, y);
-  // }
+  emitter = new Phaser.Events.EventEmitter();
 
-  // breadGroup.refresh();
+  var addBreadHandler = () => {
+    var x = Phaser.Math.Between(50, 750);
+    var y = Phaser.Math.Between(50, 550);
+    bread = this.physics.add.image(x, y, "bread");
+    bread.setCollideWorldBounds(true);
 
-  bread = this.physics.add.image(x, y, "bread");
-  //   bread.setScale(0.1);
-  bread.setCollideWorldBounds(true);
-
-  this.physics.add.overlap(player, bread, removeBread);
+    this.physics.add.overlap(player, bread, removeBread);
+  };
+  addBreadHandler();
+  emitter.on("addBread", addBreadHandler, this);
 }
-
-let removeBread = (duck, food) => {
-  console.log("transparent");
-  food.destroy();
-  quack.play();
-
-  //   bread = this.physics.add.image(x, y, "bread");
-  //   food.body.enable = false;
-};
 
 function update() {
   if (cursors.left.isDown) {
