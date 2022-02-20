@@ -17,6 +17,7 @@ var config = {
 };
 var cursors;
 var player;
+var enemy;
 var bread;
 var text;
 var breadGroup;
@@ -26,13 +27,12 @@ var emitter;
 var game = new Phaser.Game(config);
 
 function preload() {
-  //   this.load.setBaseURL("http://labs.phaser.io");
   this.load.image("background", "girls.png");
-  //   this.load.image("logo", "assets/sprites/phaser3-logo.png");
-  this.load.image("logo", "duck.png");
+  this.load.image("player", "duck.png");
   //   this.load.image("red", "assets/particles/red.png")
   this.load.image("bread", "bread.png");
   this.load.audio("quack", ["duck-quack.mp3"]);
+  this.load.image("enemy", "pink_duck.png");
 }
 
 function create() {
@@ -47,7 +47,7 @@ function create() {
     blendMode: "ADD",
   });
 
-  player = this.physics.add.image(100, 100, "logo");
+  player = this.physics.add.image(100, 100, "player");
   player.setVelocity(100, 100);
   player.setBounce(0.1);
   player.setCollideWorldBounds(true);
@@ -75,6 +75,9 @@ function create() {
   };
   addBreadHandler();
   emitter.on("addBread", addBreadHandler, this);
+
+  enemy = this.physics.add.image(700, 100, "enemy");
+  enemy.setCollideWorldBounds(true);
 }
 
 function update() {
