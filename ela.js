@@ -23,6 +23,8 @@ var text;
 var breadGroup;
 var quack;
 var emitter;
+var x;
+var y;
 
 var game = new Phaser.Game(config);
 
@@ -65,6 +67,9 @@ function create() {
 
   emitter = new Phaser.Events.EventEmitter();
 
+  enemy = this.physics.add.image(700, 100, "enemy");
+  enemy.setCollideWorldBounds(true);
+
   var addBreadHandler = () => {
     var x = Phaser.Math.Between(50, 750);
     var y = Phaser.Math.Between(50, 550);
@@ -72,12 +77,19 @@ function create() {
     bread.setCollideWorldBounds(true);
 
     this.physics.add.overlap(player, bread, removeBread);
+    console.log(x, y);
+
+    let removeBread2 = (enemy, food) => {
+      console.log("duc");
+      food.destroy();
+      emitter.emit("addBread");
+      console.log("restar bread");
+    };
+    this.physics.add.overlap(enemy, bread, removeBread2);
+    this.physics.moveToObject(enemy, bread, 100);
   };
   addBreadHandler();
   emitter.on("addBread", addBreadHandler, this);
-
-  enemy = this.physics.add.image(700, 100, "enemy");
-  enemy.setCollideWorldBounds(true);
 }
 
 function update() {
